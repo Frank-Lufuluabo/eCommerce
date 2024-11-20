@@ -1,3 +1,5 @@
+using eCommerce.Infrastructure.DependencyInjection;
+using eCommerce.Application.DependencyInjection;
 
 namespace eCommerce.Host
 {
@@ -13,6 +15,9 @@ namespace eCommerce.Host
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddInfrastructureService(builder.Configuration);
+            builder.Services.AddApplicationService();
 
             var app = builder.Build();
 

@@ -16,8 +16,9 @@ namespace eCommerce.Infrastructure.Repositories
 
         public async Task<int> DeleteAsync(Guid id)
         {
-            var entity = await context.Set<TEntity>().FindAsync(id) ?? 
-                throw new ItemNotFoundException($"Item with{id} not found");
+            var entity = await context.Set<TEntity>().FindAsync(id);
+            if (entity is null)
+                return 0;
 
             context.Set<TEntity>().Remove(entity);
             return await context.SaveChangesAsync();
