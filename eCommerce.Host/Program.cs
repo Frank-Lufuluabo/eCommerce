@@ -27,7 +27,7 @@ namespace eCommerce.Host
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseInfrastructureService();
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
