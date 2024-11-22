@@ -1,8 +1,10 @@
 ﻿
 
+using eCommerce.Application.Service.Interface.Logging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace eCommerce.Infrastructure.Middleware
 {
@@ -17,8 +19,10 @@ namespace eCommerce.Infrastructure.Middleware
             }
             catch (DbUpdateException ex)
             {
+                var logger = context.RequestServices.GetRequiredService<IAppLogger<ExceptionHandlingMiddleware>>();
                 if (ex.InnerException is SqlException innException)
                 {
+                    logger.LogError(innException, "Sql Exception");
                     switch (innException.Number)
                     {
                         case 2627: // Unique constraint violation
@@ -43,12 +47,15 @@ namespace eCommerce.Infrastructure.Middleware
                 }
                 else 
                 {
+                    logger.LogError(ex, "Related EFCore Exception");
                     context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                     await context.Response.WriteAsync("An error occurred while saving the entity changes.");
                 }
             }
             catch (Exception ex)
             {
+                var logger = context.RequestServices.GetRequiredService<IAppLogger<ExceptionHandlingMiddleware>>();
+                logger.LogError(ex, "Unknown Exception");
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 await context.Response.WriteAsync("An error occurred: " + ex.Message);
