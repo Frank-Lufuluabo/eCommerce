@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -23,7 +24,7 @@ namespace eCommerce.Infrastructure.Repositories.Authentication
             return await context.SaveChangesAsync();
         }
 
-        public string Generatetoken(List<Claim> claims)
+        public string GenerateToken(List<Claim> claims)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:Key"]!));
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -45,7 +46,8 @@ namespace eCommerce.Infrastructure.Repositories.Authentication
             { 
                 rng.GetBytes(randomeBytes);
             }
-            return Convert.ToBase64String(randomeBytes);
+            string token = Convert.ToBase64String(randomeBytes);
+            return WebUtility.UrlEncode(token);
         }
 
         public List<Claim> GetUserClaimsFromToken(string token)
