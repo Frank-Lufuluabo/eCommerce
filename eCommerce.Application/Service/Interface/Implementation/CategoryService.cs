@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
 using eCommerce.Application.DTOs;
 using eCommerce.Application.DTOs.Category;
-using eCommerce.Application.Service.Interface;
 using eCommerce.Domain.Entities;
 using eCommerce.Domain.Interfaces;
 
 
-namespace eCommerce.Application.Service.Implementation
+namespace eCommerce.Application.Service.Interface.Implementation
 {
     public class CategoryService(IGeneric<Category> categoryInterface, IMapper mapper) : ICategoryService
     {
