@@ -1,18 +1,19 @@
 ﻿using AutoMapper;
 using eCommerce.Application.DTOs;
 using eCommerce.Application.DTOs.Product;
+using eCommerce.Application.Service.Interface;
 using eCommerce.Domain.Entities;
 using eCommerce.Domain.Interfaces;
 
 
-namespace eCommerce.Application.Service.Interface.Implementation
+namespace eCommerce.Application.Service.Implementation
 {
     public class ProductService(IGeneric<Product> productInterface, IMapper mapper) : IProductService
     {
         public async Task<ServiceResponse> AddAsync(CreateProduct product)
         {
-          var mappedData = mapper.Map<Product>(product);
-          int result = await productInterface.AddAsync(mappedData);
+            var mappedData = mapper.Map<Product>(product);
+            int result = await productInterface.AddAsync(mappedData);
             return result > 0 ? new ServiceResponse(true, "Product added!") :
                 new ServiceResponse(false, "Product failed to be added");
         }
@@ -21,7 +22,7 @@ namespace eCommerce.Application.Service.Interface.Implementation
         {
             int result = await productInterface.DeleteAsync(id);
 
-            return result > 0 ? new ServiceResponse(true, "Product deleted!") : 
+            return result > 0 ? new ServiceResponse(true, "Product deleted!") :
                 new ServiceResponse(false, "Product failed or to be delete.");
         }
 
