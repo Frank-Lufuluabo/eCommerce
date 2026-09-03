@@ -34,7 +34,8 @@ namespace eCommerce.Host
                 {
                     policy.AllowAnyHeader()
                           .AllowAnyMethod()
-                          .SetIsOriginAllowed(_ => true) 
+                          .WithOrigins("https://localhost:7015")
+                          //.SetIsOriginAllowed(_ => true) 
                           .AllowCredentials();
                 });
             });
